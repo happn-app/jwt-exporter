@@ -21,9 +21,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Authenticate to Google Artifact Registry
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_GITHUB_SA_CREDENTIALS }}'
+
+      - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ghcr.io/happn-app/jwt-exporter:${{ github.event.release.tag_name }}
+          tags: |
+            ghcr.io/happn-app/jwt-exporter:${{ github.event.release.tag_name }}
+            eu.gcr.io/happn-infra/happn/jwt-exporter:${{ github.event.release.tag_name }}

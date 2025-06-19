@@ -42,15 +42,21 @@ type Config struct {
 var (
 	// Define command line flags
 	configPath string
+	version    bool
 )
 
 func init() {
 	flag.StringVar(&configPath, "config", "/config/config.yaml", "Path to the configuration file")
 	zap.LevelFlag("level", zap.InfoLevel, "Log level (debug, info, warn, error, dpanic, panic, fatal)")
+	flag.BoolVar(&version, "version", false, "Print version information and exit")
 }
 
 func main() {
 	flag.Parse()
+	if version {
+		println("JWT Exporter version", jwtexporter.Version)
+		return
+	}
 	baseLogger, _ := zap.NewProduction()
 	logger := baseLogger.With(
 		zap.String("type", "jwt-exporter"),
