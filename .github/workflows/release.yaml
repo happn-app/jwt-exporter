@@ -21,20 +21,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.2.0
-        with:
-          project_id: ${{ secrets.GCR_PROJECT }}
-          service_account_key: ${{ secrets.GCP_GITHUB_SA_CREDENTIALS }}
-
-      - name: Authorize Docker push
-        run: gcloud auth configure-docker
-
-      - name: Build and push Docker images
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: |
-            ghcr.io/happn-app/jwt-exporter:${{ github.event.release.tag_name }}
-            eu.gcr.io/happn-infra/happn/jwt-exporter:${{ github.event.release.tag_name }}
+          tags: ghcr.io/happn-app/jwt-exporter:${{ github.event.release.tag_name }}
