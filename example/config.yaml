@@ -1,0 +1,6 @@
+address: :9100
+label_selectors:
+  - "monitor.jwt.io/monitoring=true"
+polling_interval: 1h
+kubeconfig_path: ~/.kube/config
+annotation_key: jwt-exporter/secret-key
