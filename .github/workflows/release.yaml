@@ -21,10 +21,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Authenticate to Google Artifact Registry
-        uses: google-github-actions/auth@v2
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          credentials_json: '${{ secrets.GCP_GITHUB_SA_CREDENTIALS }}'
+          project_id: ${{ secrets.GCR_PROJECT }}
+          service_account_key: ${{ secrets.GCP_GITHUB_SA_CREDENTIALS }}
+
+      - name: Authorize Docker push
+        run: gcloud auth configure-docker
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
